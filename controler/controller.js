@@ -1,13 +1,18 @@
 const { initiatePayment } = require("../service/requestPayment")
 
 
-const makePayment = (req,res)=>{
-    const {phoneNumber} = req
+const makePayment = async (req,res)=>{
+    // const {phoneNumber} = req
+    let phoneNumber = '254718432590'
+    let amount = 1
+
     //logic to get the ammount to be paid. 
     try {
-        initiatePayment(phoneNumber,1)? res.status(200).message({message: 'payment passed'}):res.status(400).message({message: 'payment failed'})  
+        const response = await initiatePayment(phoneNumber,amount)
+        response?.ResponseCode == '0'? res.status(200).json({message: 'payment passed'}):res.status(400).json({message: 'payment failed'})        
     } catch (error) {
-        res.status(500).message({message: 'internal sever error'})
+        console.log(error);
+        res.status(500).json({message: 'internal sever error'})
     }
     
 }
